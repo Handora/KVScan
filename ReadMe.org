@@ -1,8 +1,9 @@
 * KVScan - A simple iterator style remote scanning C/S model
 ** About
 Wait for completion
-** Todo [0/4]
-- [ ] Page class, for bulk read from memory to reduce IO 
+** Todo [0/5]
+- [ ] Page class, for bulk read from memory to reduce IO
+- [ ] BufferPool class, for memory page cache management
 - [ ] Server class, for save the mappings and support the concurrent read
 - [ ] Client class, for scan the mappings through bulk rpc
 - [ ] Documents
