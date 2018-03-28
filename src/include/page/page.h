@@ -11,17 +11,18 @@
 namespace kvscan {
   class Page {
   public:
-    Page() { memset(data_, 0, PAGE_SIZE); max_size_ =  }
-    ~page() {};
+    Page() { memset(data_, 0, PAGE_SIZE); }
+    ~Page() {};
     page_id_t GetPageId() const { return page_id_; };
     void SetPageId(page_id_t page_id) { page_id_ = page_id; };
     page_id_t GetParentPageId() const { return parent_page_id_; };
-    void SetPageId(page_id_t page_id) { parent_page_id_ = page_id; };
+    void SetParentPageId(page_id_t page_id) { parent_page_id_ = page_id; };
     page_id_t GetLeftChildPageId() const { return left_child_page_id_; };
     void SetLeftChildPageId(page_id_t page_id) { left_child_page_id_ = page_id; };
     page_id_t GetRightChildPageId() const { return right_child_page_id_; };
     void SetRightChildPageId(page_id_t page_id) { right_child_page_id_ = page_id; };
-    
+
+    bool IsFinal() const { return is_final_; }
 
     int GetSize() const { return size_; }
     void SetSize(int size) { size_ = size; }
@@ -44,6 +45,7 @@ namespace kvscan {
     // how many object can be saved in page
     int max_size_;
     // how many object now saved in page
-    int size_; 
+    int size_;
+    bool is_final_;
   };
 } // namespace kvscan
