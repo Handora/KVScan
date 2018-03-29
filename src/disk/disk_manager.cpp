@@ -22,8 +22,7 @@ namespace kvscan {
     std::string::size_type n = file_name_.find(".");
     if (n == std::string::npos) {
       return;
-    } 
-
+    }
     
     db_io_.open(db_file,
 		std::ios::binary | std::ios::in | std::ios::out | std::ios::out);

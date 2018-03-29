@@ -7,10 +7,19 @@
 
 #include <cstring>
 #include "config/util.h"
+#include <memory>
+#include "rpc/server.h"
+
 
 namespace kvscan {
-  
+  class BufferPoolManager;
   class Page {
+  /*
+   * TODO
+   *   1. we can just put meta data in memory while catch the real data from buffer
+   *   2. we can just write the found next id, and save it to prevent from reading again
+   */
+    
   public:
     Page() { memset(data_, 0, PAGE_SIZE); }
     ~Page() {};
@@ -23,17 +32,14 @@ namespace kvscan {
     page_id_t GetRightChildPageId() const { return right_child_page_id_; };
     void SetRightChildPageId(page_id_t page_id) { right_child_page_id_ = page_id; };
 
-    bool IsFinal() const { return is_final_; }
-
-    int GetSize() const { return size_; }
-    void SetSize(int size) { size_ = size; }
-    void IncreaseSize(int amount) { size_ += amount; };
-
-    int GetMaxSize() const { return max_size_; };
-    void SetMaxSize(int max_size) { max_size_ = max_size; };
-
     char *GetData() { return data_; }
-    
+
+    page_id_t NextPageId(const page_id_t& page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
+
+    static page_id_t PrevPageId(const page_id_t& page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
+
+    void InitMeta();
+    MSGPACK_DEFINE_ARRAY(data_, page_id_, parent_page_id_, left_child_page_id_, right_child_page_id_);
   private:
     char data_[PAGE_SIZE];
     page_id_t page_id_ = INVALID_PAGE_ID;
@@ -42,10 +48,8 @@ namespace kvscan {
     page_id_t right_child_page_id_ = INVALID_PAGE_ID;
     // Is this page the first 100 pages of the all
     //     bool is_first_100_;
-    // how many object can be saved in page
-    int max_size_;
+    // how many object can be saved in page 
     // how many object now saved in page
-    int size_;
-    bool is_final_;
+    
   };
 } // namespace kvscan

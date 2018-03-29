@@ -1,1 +1,3 @@
-add_executable(server  server.cpp)
+add_library(server server.cpp)
+target_link_libraries(page)
+

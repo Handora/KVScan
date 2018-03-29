@@ -2,34 +2,7 @@
  *  @author: handora
  *  @mail: qcdsr970209@gmail.com
  */
-
-#include <iostream>
-#include "rpc/client.h"
-#include "page/page.h"
-#include <string>
-#include <memory>
-#include <utility>
-
-namespace kvscan {
-  class ScanClient {
-    typedef int id_t;
-  public:
-    ScanClient(std::string address, std::string port);
-    bool HasNext();
-    void Open();
-    void Close();
-    std::pair<std::string, std::string> Next();
-    void Rewind();
-  private:
-    std::shared_ptr<rpc::client> client_ = nullptr;
-    std::string address_;
-    std::string port_;
-    id_t id_;
-    int now_readn_ = 0;
-    static id_t id_seed_;
-    std::shared_ptr<Page> current_page_ = nullptr;
-  };
-}
+#include "client/client.h"
 
 namespace kvscan {
   ScanClient::ScanClient(std::string address, std::string port): id_(++id_seed_) {
@@ -48,11 +21,31 @@ namespace kvscan {
   }
 
   std::pair<std::string, std::string> ScanClient::Next() {
-    if (current_page_ == nullptr) {
-      current_page_  = std::make_shared<Page>(client_->call("Next", id_).as<Page>());
-      
+    if (current_page_ == nullptr || now_pointer_ >= 512 ) {
+      if (!this->HasNext()) {
+	return {"", ""};
+      }
+      current_page_ = std::make_shared<Page>(client_->call("Next", id_).as<Page>());
+      now_pointer_ = 16;
     }
-    return {"", ""};
+
+    // TODO error handler
+    int n = ReadInt(current_page_->GetData()+now_pointer_);
+    assert(n>=0);
+    if (n == 0) {
+      now_pointer_ = 512;
+      return this->Next();
+    }
+    std::string key = ReadString(current_page_->GetData()+now_pointer_+4, n);
+    now_pointer_ += n + 4;
+    n = ReadInt(current_page_->GetData()+now_pointer_);
+    assert(n>=0);
+    if (n == 0) {
+      assert(false);
+    }
+    std::string value = ReadString(current_page_->GetData()+now_pointer_+4, n);
+    now_pointer_ += n + 4;
+    return {key, value};
   }
 
   void ScanClient::Rewind() {
@@ -61,32 +54,7 @@ namespace kvscan {
   }
 
   bool ScanClient::HasNext() {
-    while (current_page_ == nullptr || now_readn_ == current_page_->GetSize()) {
-      current_page_  = std::make_shared<Page>(client_->call("Next", id_).as<Page>());
-      if (current_page_->IsFinal()) {
-	return false;
-      }
-      now_readn_ = 0;
-    }
-
-    return true;
+    bool has_next = client_->call("HasNext", id_).as<bool>();
+    return has_next;
   }  
 }
-
-int main(int argc, char *argv[])
-{
-  if (argc < 3) {
-    std::cout << "Scanclient address port" << std::endl;
-    exit(1);
-  }
-
-  std::shared_ptr<kvscan::ScanClient> client = std::make_shared<kvscan::ScanClient>(std::string(std::move(argv[1])), std::string(argv[2]));
-
-  int i = 0;
-  while(client->HasNext() && i < 100) {
-    auto key_value = client->Next();
-    std::cout << key_value.first << " " << key_value.second << std::endl;
-  }
-  return 0;
-}
-

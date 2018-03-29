@@ -57,6 +57,7 @@ namespace kvscan {
     disk_manager_->ReadPage(page_id, page->GetData());
     page_table_->insert(std::make_pair(page_id, page));
     replacer_->Insert(page);
+    page->InitMeta();
     return page;
   }
   
