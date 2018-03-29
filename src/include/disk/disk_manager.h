@@ -1,10 +1,17 @@
+/**
+ * borrow from cmu 15-445
+ * diskmanager.cpp
+ */
+
+#pragma once
+
 #include <atomic>
 #include <fstream>
 #include <future>
 #include <string>
+#include "config/util.h"
 
 namespace kvscan {
-  typedef int page_id_t;
   class DiskManager {
   public:
     DiskManager(const std::string &file);
@@ -23,5 +30,4 @@ namespace kvscan {
     std::string file_name_;
     std::atomic<page_id_t> next_page_id_;
   };
-
 } // namespace kvscan

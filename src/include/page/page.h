@@ -41,7 +41,7 @@ namespace kvscan {
     page_id_t left_child_page_id_ = INVALID_PAGE_ID;
     page_id_t right_child_page_id_ = INVALID_PAGE_ID;
     // Is this page the first 100 pages of the all
-    bool is_first_100_;
+    //     bool is_first_100_;
     // how many object can be saved in page
     int max_size_;
     // how many object now saved in page

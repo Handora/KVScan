@@ -54,7 +54,7 @@ foreach(test_src ${test_srcs} )
     add_dependencies(check ${test_name})
 
     # link libraries
-    target_link_libraries(${test_name} gtest disk) 
+    target_link_libraries(${test_name} gtest disk buffer) 
 
     # set target properties
     set_target_properties(${test_name}

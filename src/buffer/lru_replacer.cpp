@@ -35,7 +35,7 @@ namespace kvscan {
   /*
    * victim the oldest k/v based on lru
    */
-  bool LRUReplacer::Victim(Page* value) {
+  bool LRUReplacer::Victim(Page* &value) {
     std::lock_guard<std::mutex> latch(lru_replacer_latch_);
     if (! lru_list_.empty()) {
       value = lru_list_.back();
