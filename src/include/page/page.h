@@ -7,9 +7,11 @@
 
 #include <cstring>
 #include "config/util.h"
+#include "buffer/buffer_pool_manager.h"
 
 namespace kvscan {
   class Page {
+    friend class BufferPoolManager;
   public:
     Page() { memset(data_, 0, PAGE_SIZE); }
     ~Page() {};
@@ -31,8 +33,7 @@ namespace kvscan {
     int GetMaxSize() const { return max_size_; };
     void SetMaxSize(int max_size) { max_size_ = max_size; };
 
-    char *GetData() { return data_; }
-    
+    char *GetData() { return data_; } 
     
   private:
     char data_[PAGE_SIZE];
