@@ -15,9 +15,9 @@ namespace kvscan {
     
     page_id_t AllocatePage();
     void DeallocatePage(page_id_t page_id);
-    
-  private:
     int GetFileSize(const std::string &name);
+  private:
+    
     // stream to write db file
     std::fstream db_io_;
     std::string file_name_;

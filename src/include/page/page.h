@@ -7,11 +7,10 @@
 
 #include <cstring>
 #include "config/util.h"
-#include "buffer/buffer_pool_manager.h"
 
 namespace kvscan {
+  
   class Page {
-    friend class BufferPoolManager;
   public:
     Page() { memset(data_, 0, PAGE_SIZE); }
     ~Page() {};

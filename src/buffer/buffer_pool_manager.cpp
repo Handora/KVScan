@@ -32,8 +32,8 @@ namespace kvscan {
 
     // if exist, pin the page and return immediately
     if (it != page_table_->end()) {
-      replacer_->Erase(it);
-      replacer_->Insert(it);
+      replacer_->Erase(it->second);
+      replacer_->Insert(it->second);
       return page;
     }
   
@@ -48,7 +48,7 @@ namespace kvscan {
     } 
     page->SetPageId(page_id);
     disk_manager_->ReadPage(page_id, page->GetData());
-    page_table_->Insert(page_id, page); 
+    page_table_->insert(std::make_pair(page_id, page)); 
     return page;
   }
   

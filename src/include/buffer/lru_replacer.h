@@ -1,9 +1,12 @@
+#pragma once
+
+#include "page/page.h"
+
 #include <cstdlib>
 #include <list>
 #include <iterator>
 #include <mutex>
 #include <unordered_map>
-#include "page/page.h"
 
 namespace kvscan {
 
@@ -13,11 +16,11 @@ namespace kvscan {
 
     ~LRUReplacer();
 
-    void Insert(Page* &value);
+    void Insert(Page* value);
 
-    bool Victim(Page* &value);
+    bool Victim(Page* value);
 
-    bool Erase(Page* &value);
+    bool Erase(Page* value);
 
     size_t Size();
 

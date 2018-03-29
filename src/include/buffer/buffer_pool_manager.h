@@ -1,8 +1,9 @@
+#pragma once
+
 #include <list>
 #include <mutex>
 #include <cassert>
 
-#include "page/page.h"
 #include "map"
 #include "disk/disk_manager.h"
 #include "buffer/lru_replacer.h"
@@ -16,14 +17,6 @@ namespace kvscan {
     ~BufferPoolManager();
 
     Page *FetchPage(page_id_t page_id);
-
-    bool UnpinPage(page_id_t page_id, bool is_dirty);
-    
-    bool FlushPage(page_id_t page_id);
-
-    Page *NewPage(page_id_t &page_id);
-  
-    bool DeletePage(page_id_t page_id);
 
   private:
     size_t pool_size_; // number of pages in buffer pool

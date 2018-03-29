@@ -2,20 +2,12 @@
  * lru_replacer.h
  * author: handora
  * email: qcdsr970209@gmail.com
- * LRU bufferpool alogorithm
+ * LRU bufferpool algorithm
  */
 
-#include <cstdlib>
-#include <list>
-#include <iterator>
-#include <mutex>
-#include <unordered_map>
-#include "page/page.h"
 #include "buffer/lru_replacer.h"
 
-
 namespace kvscan {
-
   LRUReplacer::LRUReplacer() {}
 
   LRUReplacer::~LRUReplacer() {}
@@ -23,7 +15,7 @@ namespace kvscan {
   /*
    * Insert value into LRU
    */
-  void LRUReplacer::Insert(Page* &value) {
+  void LRUReplacer::Insert(Page* value) {
     // RAII like latch
     std::lock_guard<std::mutex> latch(lru_replacer_latch_);
 
@@ -43,7 +35,7 @@ namespace kvscan {
   /*
    * victim the oldest k/v based on lru
    */
-  bool LRUReplacer::Victim(Page* &value) {
+  bool LRUReplacer::Victim(Page* value) {
     std::lock_guard<std::mutex> latch(lru_replacer_latch_);
     if (! lru_list_.empty()) {
       value = lru_list_.back();
@@ -57,7 +49,7 @@ namespace kvscan {
   /*
    * erase the choosen value pair
    */
-  bool LRUReplacer::Erase(Page* &value) {
+  bool LRUReplacer::Erase(Page* value) {
     std::lock_guard<std::mutex> latch(lru_replacer_latch_);
     
     auto result = lru_key_itr_map_.find(value);
@@ -70,6 +62,7 @@ namespace kvscan {
   }
 
   size_t LRUReplacer::Size() {
-    return lru_list_.size();
+    return static_cast<size_t>(lru_list_.size());
   }
 } // namespace kvscan
+

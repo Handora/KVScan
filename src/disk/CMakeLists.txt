@@ -1,1 +1,1 @@
-add_executable(disk disk_manager.cpp)
+add_library(disk disk_manager.cpp)
