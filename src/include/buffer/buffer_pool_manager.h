@@ -1,3 +1,9 @@
+/** 
+ * buffer_pool_manager.h
+ * @author: Handora
+ * @email: qcdsr970209@gmail.com
+ */
+
 #pragma once
 
 #include <list>
@@ -17,6 +23,8 @@ namespace kvscan {
     ~BufferPoolManager();
 
     Page *FetchPage(page_id_t page_id);
+
+    Page *NewPage(page_id_t &page_id);
 
   private:
     size_t pool_size_; // number of pages in buffer pool

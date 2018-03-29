@@ -1,3 +1,9 @@
+/** 
+ * buffer_pool_manager.cpp
+ * @author: Handora
+ * @email: qcdsr970209@gmail.com
+ */
+#include <iostream>
 #include "buffer/buffer_pool_manager.h"
 
 namespace kvscan {
@@ -30,12 +36,35 @@ namespace kvscan {
     Page* page = nullptr;
     auto it = page_table_->find(page_id);
 
-    // if exist, pin the page and return immediately
     if (it != page_table_->end()) {
-      replacer_->Erase(it->second);
       replacer_->Insert(it->second);
       return page;
     }
+    
+    if (!free_list_->empty()) {
+      // find from free list
+      page = free_list_->front();
+      free_list_->pop_front();
+    } else {
+      // find from lru replacer 
+      replacer_->Victim(page);
+      
+      // TODO, use pin to judge whether to write back
+      disk_manager_->WritePage(page->GetPageId(), page->GetData());
+      page_table_->erase(page->GetPageId()); 
+    } 
+    page->SetPageId(page_id);
+    disk_manager_->ReadPage(page_id, page->GetData());
+    page_table_->insert(std::make_pair(page_id, page));
+    replacer_->Insert(page);
+    return page;
+  }
+  
+  Page *BufferPoolManager::NewPage(page_id_t &page_id) {
+    std::lock_guard<std::mutex> latch(latch_);
+    
+    page_id = disk_manager_->AllocatePage();
+    Page *page = nullptr;
   
     if (!free_list_->empty()) {
       // find from free list
@@ -44,35 +73,15 @@ namespace kvscan {
     } else {
       // find from lru replacer 
       replacer_->Victim(page); 
+      
+      // TODO, use pin to judge whether to write back
+      disk_manager_->WritePage(page->GetPageId(), page->GetData());
       page_table_->erase(page->GetPageId()); 
     } 
     page->SetPageId(page_id);
-    disk_manager_->ReadPage(page_id, page->GetData());
-    page_table_->insert(std::make_pair(page_id, page)); 
+    page_table_->insert(std::make_pair(page_id, page));
+    memset(page->GetData(), 0, PAGE_SIZE);
+    replacer_->Insert(page);
     return page;
   }
-  
-  // Page *BufferPoolManager::NewPage(page_id_t &page_id) {
-  //   std::lock_guard<std::mutex> latch(latch_);
-  //   page_id = disk_manager_->AllocatePage();
-  //   Page *page = nullptr;
-  
-  //   if (!free_list_->empty()) {
-  //     // find from free list
-  //     page = free_list_->front();
-  //     free_list_->pop_front();
-  //   } else {
-  //     // find from lru replacer 
-  //     bool ok = replacer_->Victim(page);
-  //     if (!ok) {
-  // 	// all page are pinned
-  // 	return nullptr;
-  //     }
-  //     page_table_->remove(page->GetPageId()); 
-  //   } 
-  //   page->SetPageId(page_id);
-  //   page_table_->insert(std::make_pair(page_id, page));
-  //   memset(page->data_, 0, PAGE_SIZE);
-  //   return page;
-  // }
 } // namespace kvscan

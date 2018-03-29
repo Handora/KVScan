@@ -32,7 +32,7 @@ namespace kvscan {
     int GetMaxSize() const { return max_size_; };
     void SetMaxSize(int max_size) { max_size_ = max_size; };
 
-    char *GetData() { return data_; } 
+    char *GetData() { return data_; }
     
   private:
     char data_[PAGE_SIZE];
