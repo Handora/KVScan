@@ -1,3 +1,10 @@
+/** 
+ * client.h
+ * @author: handora
+ * @mail: qcdsr970209@gmail.com
+ * client api 
+ */
+
 #pragma once
 #include <iostream>
 #include "rpc/client.h"
@@ -18,6 +25,7 @@ namespace kvscan {
     std::pair<std::string, std::string> Next();
     void Rewind();
     std::shared_ptr<rpc::client> client_ = nullptr;
+    
   private: 
     std::string address_;
     std::string port_;

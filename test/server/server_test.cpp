@@ -11,12 +11,8 @@
 namespace kvscan {
   TEST(Server_Test, SimpleTest) {
     system("python3 ../script/generate.py");
-    Server server("51202"); 
-    server.server_->bind("Open", [&server](id_t id) { server.Open(id); });
-    server.server_->bind("Close", [&server](id_t id) { server.Close(id); });
-    server.server_->bind("HasNext", [&server](id_t id) { return server.HasNext(id); });
-    server.server_->bind("Next", [&server](id_t id) -> Page { return server.Next(id); }); 
-    server.server_->async_run(4); 
+    Server server("51202");
+    server.AsyncRun(4);
     rpc::client client("127.0.0.1", 51202);
     client.call("Open", 0);
     bool ok = client.call("HasNext", 0).as<bool>();
@@ -58,12 +54,8 @@ namespace kvscan {
 
   TEST(Server_Test, SimpleTest2) {
     system("python3 ../script/generate2.py");
-    Server server("51202", "/tmp/kvscan/scan2.db"); 
-    server.server_->bind("Open", [&server](id_t id) { server.Open(id); });
-    server.server_->bind("Close", [&server](id_t id) { server.Close(id); });
-    server.server_->bind("HasNext", [&server](id_t id) { return server.HasNext(id); });
-    server.server_->bind("Next", [&server](id_t id) -> Page { return server.Next(id); }); 
-    server.server_->async_run(4); 
+    Server server("51202", "/tmp/kvscan/scan2.db");
+    server.AsyncRun(4);
     rpc::client client("127.0.0.1", 51202);
     client.call("Open", 0); 
     Page p = client.call("Next", 0).as<Page>();

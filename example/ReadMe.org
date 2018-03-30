@@ -1,0 +1,54 @@
+* Example
+** Quick Start
+- server
+#+BEGIN_SRC c++
+  // server side
+
+  #include "server/server.h"
+
+  int main()
+  {
+    // initial the server
+    kvscan::Server server("51202");
+
+    // blocking handle the rpc
+    server.SyncRun();
+
+    // if you want to run with 4 thread
+    server.AsyncRun(4);
+  
+    return 0;
+  }
+
+
+#+END_SRC
+
+- client
+#+BEGIN_SRC c++
+// client
+#include "client/client.h"
+#include <iostream>
+#include <functional>
+#include <string>
+
+int main()
+{
+  // initial the client
+  kvscan::ScanClient client("127.0.0.1", "51202");
+
+  // Opne the rpc
+  client.Open();
+
+  // Java style iterator
+  while (client.HasNext()) {
+    // get the next
+    auto res = client.Next();
+    // output rge answer
+    std::cout << res.first << " " << res.second << std::endl;
+  }
+  return 0;
+}
+#+END_SRC
+
+** Advanced usage
+- wait for completion
