@@ -5,7 +5,7 @@ Wait for completion
 - [ ] Page class, for bulk read from memory to reduce IO
 - [X] DiskManaer class, for disk management
 - [X] LRUreplacer class, for lru algorithm utility
-- [X] BufferPool class, for memory page buffer management
+- [X] BufferPool class, for memory page buffer managements
 - [X] Server class, for save the mappings and support the concurrent read
 - [ ] Client class, for scan the mappings through bulk rpc
 - [ ] Documents
