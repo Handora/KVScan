@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <string>
 #include <cstring>
 #include "config/util.h"
 #include <memory>
@@ -38,8 +39,9 @@ namespace kvscan {
     static page_id_t PrevPageId(const page_id_t& page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
 
     void InitMeta();
-    MSGPACK_DEFINE_ARRAY(data_, page_id_, parent_page_id_, left_child_page_id_, right_child_page_id_);
-  private:
+    MSGPACK_DEFINE_ARRAY(str_, data_, page_id_, parent_page_id_, left_child_page_id_, right_child_page_id_);
+    std::string str_;
+  private: 
     char data_[PAGE_SIZE];
     page_id_t page_id_ = INVALID_PAGE_ID;
     page_id_t parent_page_id_ = INVALID_PAGE_ID;

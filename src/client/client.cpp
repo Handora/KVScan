@@ -3,15 +3,19 @@
  *  @mail: qcdsr970209@gmail.com
  */
 #include "client/client.h"
+#include "rpc/client.h"
+#include <cstdio>
+#include <cstring>
 
 namespace kvscan {
-  ScanClient::ScanClient(std::string address, std::string port): id_(++id_seed_) {
+  ScanClient::ScanClient(std::string address, std::string port){
+    id_ = ++ScanClient::id_seed_;
     address_ = std::move(address);
-    port_ = std::move(port); 
+    port_ = std::move(port);
+    client_ = std::make_shared<rpc::client>(address_, stoi(port_));
   }
 
   void ScanClient::Open() {
-    client_ = std::make_shared<rpc::client>(address_, port_);
     client_->call("Open", id_);
   }
 
@@ -25,12 +29,13 @@ namespace kvscan {
       if (!this->HasNext()) {
 	return {"", ""};
       }
-      current_page_ = std::make_shared<Page>(client_->call("Next", id_).as<Page>());
+      current_page_ = std::make_shared<Page>(client_->call("Next", id_).as<Page>()); 
+      memcpy(current_page_->GetData(), current_page_->str_.c_str(), 512);    
       now_pointer_ = 16;
     }
 
-    // TODO error handler
-    int n = ReadInt(current_page_->GetData()+now_pointer_);
+    // TODO error handler 
+    int n = ReadInt(current_page_->GetData()+now_pointer_); 
     assert(n>=0);
     if (n == 0) {
       now_pointer_ = 512;
@@ -54,7 +59,11 @@ namespace kvscan {
   }
 
   bool ScanClient::HasNext() {
-    bool has_next = client_->call("HasNext", id_).as<bool>();
-    return has_next;
+    if (current_page_ != nullptr && now_pointer_ < 512) {
+      int n = ReadInt(current_page_->GetData()+now_pointer_);
+      if (n != 0)
+	return true;
+    } 
+    return client_->call("HasNext", id_).as<bool>(); 
   }  
 }

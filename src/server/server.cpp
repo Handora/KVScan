@@ -8,9 +8,7 @@
 #include <iostream>
 
 namespace kvscan {
-
   Page fake_page;
-  
   Server::Server(const std::string port, const std::string file)
     : port_(port),
       root_(0)  {
@@ -70,7 +68,8 @@ namespace kvscan {
     if (current_page_id == INITIAL_PAGE_ID) {
       id_page_map_[id] = {root_, NOFOUND_PAGE_ID};
       return *(buffer_pool_manager_->FetchPage(root_));
-    } 
+    }
+    
     page_id_t next_page_id = itr->second.second; 
     if (next_page_id != NOFOUND_PAGE_ID) {
       if (next_page_id == INVALID_PAGE_ID)

@@ -17,13 +17,13 @@ namespace kvscan {
     void Close();
     std::pair<std::string, std::string> Next();
     void Rewind();
-  private:
     std::shared_ptr<rpc::client> client_ = nullptr;
+  private: 
     std::string address_;
     std::string port_;
     id_t id_;
     int now_pointer_ = 16;
-    static id_t id_seed_;
+    id_t id_seed_ = 0;
     std::shared_ptr<Page> current_page_ = nullptr;
-  };
+  }; 
 } // namespace kvscan

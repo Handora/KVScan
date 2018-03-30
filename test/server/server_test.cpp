@@ -18,16 +18,23 @@ namespace kvscan {
     server.server_->bind("Next", [&server](id_t id) -> Page { return server.Next(id); }); 
     server.server_->async_run(4); 
     rpc::client client("127.0.0.1", 51202);
-    client.call("Open", 0); 
-    Page p = client.call("Next", 0).as<Page>();
-    EXPECT_EQ(p.GetPageId(), 0); 
+    client.call("Open", 0);
     bool ok = client.call("HasNext", 0).as<bool>();
+    EXPECT_EQ(ok, true);
+    ok = client.call("HasNext", 0).as<bool>();
+    EXPECT_EQ(ok, true); 
+
+    Page p = client.call("Next", 0).as<Page>(); 
+    EXPECT_EQ(p.GetPageId(), 0); 
+    ok = client.call("HasNext", 0).as<bool>();
     EXPECT_EQ(ok, true); 
     p = client.call("Next", 0).as<Page>();
     EXPECT_EQ(p.GetPageId(), 2);
     ok = client.call("HasNext", 0).as<bool>();
+    ok = client.call("HasNext", 0).as<bool>();
+    ok = client.call("HasNext", 0).as<bool>();
     EXPECT_EQ(ok, true); 
-    p = client.call("Next", 0).as<Page>();
+    p = client.call("Next", 0).as<Page>(); 
     EXPECT_EQ(p.GetPageId(), 1);
     ok = client.call("HasNext", 0).as<bool>();
     EXPECT_EQ(ok, true); 

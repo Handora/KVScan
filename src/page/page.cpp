@@ -51,7 +51,8 @@ namespace kvscan {
     page_id_ = ReadInt(data_); 
     parent_page_id_ = ReadInt(data_+4); 
     left_child_page_id_ = ReadInt(data_+8); 
-    right_child_page_id_ = ReadInt(data_+12); 
+    right_child_page_id_ = ReadInt(data_+12);
+    str_ = std::string(data_, 512); 
   }
   
-} // namespace kvscan
+  } // namespace kvscan

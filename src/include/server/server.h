@@ -25,7 +25,7 @@ namespace kvscan {
     bool HasNext(id_t id);
     Page Next(id_t id);
     std::shared_ptr<rpc::server> server_;
-  private:
+  private: 
     std::string port_; 
     std::map<id_t, std::pair<page_id_t, page_id_t>> id_page_map_;
     DiskManager* disk_manager_;

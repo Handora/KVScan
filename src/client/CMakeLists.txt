@@ -1,1 +1,1 @@
-add_executable(client client.cpp)
+add_library(client client.cpp)
