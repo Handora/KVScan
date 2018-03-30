@@ -1,6 +1,6 @@
 * KVScan - A simple iterator style remote scanning C/S model
 ** About
-Wait for completion
+Detail implementation in http://blog.handora.me/post/2018/03/2018-03-30-kvscan/
 ** Todo [6/10]
 - [X] Page class, for bulk read from memory to reduce IO
 - [X] DiskManaer class, for disk management
