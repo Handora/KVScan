@@ -12,7 +12,7 @@ namespace kvscan {
 
   LRUReplacer::~LRUReplacer() {}
 
-  /*
+  /**
    * Insert value into LRU
    */
   void LRUReplacer::Insert(Page* value) {
@@ -32,7 +32,7 @@ namespace kvscan {
     }
   }
 
-  /*
+  /**
    * victim the oldest k/v based on lru
    */
   bool LRUReplacer::Victim(Page* &value) {
@@ -46,7 +46,7 @@ namespace kvscan {
     return false;
   }
 
-  /*
+  /**
    * erase the choosen value pair
    */
   bool LRUReplacer::Erase(Page* value) {
@@ -61,6 +61,9 @@ namespace kvscan {
     return false;
   }
 
+  /**
+   * return size
+   */
   size_t LRUReplacer::Size() {
     return static_cast<size_t>(lru_list_.size());
   }

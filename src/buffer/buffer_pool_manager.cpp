@@ -2,6 +2,7 @@
  * buffer_pool_manager.cpp
  * @author: Handora
  * @email: qcdsr970209@gmail.com
+ * memory page buffer managerment based on lru_replacer
  */
 #include <iostream>
 #include "buffer/buffer_pool_manager.h"
@@ -31,6 +32,10 @@ namespace kvscan {
     delete page_table_;
   }
 
+  /**
+   * fetch page from bufferpool if exists
+   * else fetch from diskmanager
+   */
   Page *BufferPoolManager::FetchPage(page_id_t page_id) {
     assert(page_id != INVALID_PAGE_ID); 
     std::lock_guard<std::mutex> latch(latch_);
@@ -62,7 +67,10 @@ namespace kvscan {
     page->InitMeta();
     return page;
   }
-  
+
+  /*
+   * create a new page, Test only
+   */
   Page *BufferPoolManager::NewPage(page_id_t &page_id) {
     std::lock_guard<std::mutex> latch(latch_);
     

@@ -25,12 +25,14 @@ namespace kvscan {
     void Insert(Page* value);
     // victim the oldest one
     bool Victim(Page* &value);
+    // erase a specific page
     bool Erase(Page* value);
+    
     size_t Size();
 
   private: 
-    std::unordered_map<Page*, std::list<Page*>::iterator> lru_key_itr_map_;
-    std::list<Page*> lru_list_;
-    std::mutex lru_replacer_latch_;
+    std::unordered_map<Page*, std::list<Page*>::iterator> lru_key_itr_map_; // map for pointer
+    std::list<Page*> lru_list_; // lru list
+    std::mutex lru_replacer_latch_; // latch for cc
   };
 } // namespace kvscan

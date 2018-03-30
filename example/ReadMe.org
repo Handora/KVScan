@@ -50,5 +50,18 @@ int main()
 }
 #+END_SRC
 
+- how to use
+#+BEGIN_SRC shell
+  mkdir build
+  cd build
+  cmake ..
+  make kvserver
+  make kvclient
+  # generate the BST data for server
+  python3 ../script/generate.py
+  bin/kvserver &
+  bin/kvclient
+#+END_SRC
+
 ** Advanced usage
 - wait for completion
