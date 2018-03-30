@@ -54,7 +54,7 @@ foreach(test_src ${test_srcs} )
     add_dependencies(check ${test_name})
 
     # link libraries
-    target_link_libraries(${test_name} /home/handora/Src/KVScan/third_party/rpclib/build/librpc.a gtest disk page buffer server  disk buffer page util page server client ${PROJECT_SOURCE_DIR}/third_party/rpclib/build/librpc.a) 
+    target_link_libraries(${test_name} rpc gtest disk page buffer server  disk buffer page util page server client rpc) 
 
     # set target properties
     set_target_properties(${test_name}

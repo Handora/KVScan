@@ -12,6 +12,13 @@ Wait for completion
 - [ ] Client cache, reuse the bufferpoolmanager
 - [ ] first100page, reduce overload of initial read
 - [ ] meta tree, save meta which can be fetched easily
+** Install
+#+BEGIN_SRC shell
+  git clone https://github.com/Handora/KVScan.git kvscan
+  cd kvscan
+  git submodule init
+  git submodule update
+#+END_SRC
 ** Build
 #+BEGIN_SRC shell
     mkdir build
@@ -24,12 +31,17 @@ Wait for completion
 ** Testing
 #+BEGIN_SRC shell
   cd build
+  # generate with python3 and need improvement
+  python3 ../script/generate.py
+  python3 ../script/generate2.py
   make check
 #+END_SRC
 ** Unit Testing
 #+BEGIN_SRC shell
   # if you want to unit test *_test
   cd build
+  python3 ../script/generate.py
+  python3 ../script/generate2.py
   make *_test
   # and so on
 #+END_SRC

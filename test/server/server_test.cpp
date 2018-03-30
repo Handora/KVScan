@@ -9,8 +9,11 @@
 #include <cstdlib>
 
 namespace kvscan {
+  // TODO
+  //   how to cope with system("python3 ../script/generate.py");
+  
   TEST(Server_Test, SimpleTest) {
-    system("python3 ../script/generate.py");
+    // system("python3 ../script/generate.py");
     Server server("51202");
     server.AsyncRun(4);
     rpc::client client("127.0.0.1", 51202);
@@ -53,7 +56,7 @@ namespace kvscan {
   }
 
   TEST(Server_Test, SimpleTest2) {
-    system("python3 ../script/generate2.py");
+    // system("python3 ../script/generate2.py");
     Server server("51202", "/tmp/kvscan/scan2.db");
     server.AsyncRun(4);
     rpc::client client("127.0.0.1", 51202);
