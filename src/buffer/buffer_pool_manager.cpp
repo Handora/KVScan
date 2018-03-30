@@ -5,6 +5,7 @@
  */
 #include <iostream>
 #include "buffer/buffer_pool_manager.h"
+#include "page/page.h"
 
 namespace kvscan {
 
@@ -31,13 +32,14 @@ namespace kvscan {
   }
 
   Page *BufferPoolManager::FetchPage(page_id_t page_id) {
-    assert(page_id != INVALID_PAGE_ID);
+    assert(page_id != INVALID_PAGE_ID); 
     std::lock_guard<std::mutex> latch(latch_);
     Page* page = nullptr;
     auto it = page_table_->find(page_id);
 
     if (it != page_table_->end()) {
       replacer_->Insert(it->second);
+      page = it->second; 
       return page;
     }
     
@@ -85,4 +87,5 @@ namespace kvscan {
     replacer_->Insert(page);
     return page;
   }
+
 } // namespace kvscan

@@ -18,7 +18,7 @@ namespace kvscan {
   class Server {
     typedef int id_t;
   public:
-    Server(const std::string port="51202");
+    Server(const std::string port, const std::string file="/tmp/kvscan/scan.db");
     ~Server();
     void Open(id_t id);
     void Close(id_t id);

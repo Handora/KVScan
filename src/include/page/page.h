@@ -10,15 +10,14 @@
 #include <memory>
 #include "rpc/server.h"
 
-
 namespace kvscan {
   class BufferPoolManager;
   class Page {
-  /*
-   * TODO
-   *   1. we can just put meta data in memory while catch the real data from buffer
-   *   2. we can just write the found next id, and save it to prevent from reading again
-   */
+    /*
+     * TODO
+     *   1. we can just put meta data in memory while catch the real data from buffer
+     *   2. we can just write the found next id, and save it to prevent from reading again
+     */
     
   public:
     Page() { memset(data_, 0, PAGE_SIZE); }
@@ -34,7 +33,7 @@ namespace kvscan {
 
     char *GetData() { return data_; }
 
-    page_id_t NextPageId(const page_id_t& page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
+    static page_id_t NextPageId(page_id_t page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
 
     static page_id_t PrevPageId(const page_id_t& page_id, std::shared_ptr<BufferPoolManager> buffer_pool_manager);
 

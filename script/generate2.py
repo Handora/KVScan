@@ -3,7 +3,7 @@
 import os
 import struct
 
-filename = "/tmp/kvscan/scan.db"
+filename = "/tmp/kvscan/scan2.db"
 
 
 def createFile():
@@ -40,7 +40,7 @@ def main():
     f.write(struct.pack('i', 1))
     f.write(struct.pack('i', 3))
     f.write(struct.pack('i', 0))
-    f.write(struct.pack('i', -1))
+    f.write(struct.pack('i', 7))
 
     for i in range(4):
         f.write(struct.pack('i', 58))
@@ -72,7 +72,7 @@ def main():
 
     for i in range(4):
         f.write(struct.pack('i', 58))
-        f.write(bytearray(56 * 'a' + 'd' + chr(ord('a')+i), 'utf-8'))
+        f.write(bytearray(56 * 'a' + 'f' + chr(ord('a')+i), 'utf-8'))
         f.write(struct.pack('i', 58))
         f.write(bytearray(58 * 'a', 'utf-8'))
 
@@ -86,7 +86,7 @@ def main():
 
     for i in range(4):
         f.write(struct.pack('i', 58))
-        f.write(bytearray(56 * 'a' + 'f' + chr(ord('a')+i), 'utf-8'))
+        f.write(bytearray(56 * 'a' + 'h' + chr(ord('a')+i), 'utf-8'))
         f.write(struct.pack('i', 58))
         f.write(bytearray(58 * 'a', 'utf-8'))
 
@@ -100,7 +100,7 @@ def main():
 
     for i in range(4):
         f.write(struct.pack('i', 58))
-        f.write(bytearray(56 * 'a' + 'e' + chr(ord('a')+i), 'utf-8'))
+        f.write(bytearray(56 * 'a' + 'g' + chr(ord('a')+i), 'utf-8'))
         f.write(struct.pack('i', 58))
         f.write(bytearray(58 * 'a', 'utf-8'))
 
@@ -114,12 +114,40 @@ def main():
 
     for i in range(4):
         f.write(struct.pack('i', 58))
-        f.write(bytearray(56 * 'a' + 'g' + chr(ord('a')+i), 'utf-8'))
+        f.write(bytearray(56 * 'a' + 'i' + chr(ord('a')+i), 'utf-8'))
         f.write(struct.pack('i', 58))
         f.write(bytearray(58 * 'a', 'utf-8'))
 
     f.flush()
     assert(os.path.getsize(filename) == 512*7)
+
+    f.write(struct.pack('i', 7))
+    f.write(struct.pack('i', 1))
+    f.write(struct.pack('i', 8))
+    f.write(struct.pack('i', -1))
+
+    for i in range(4):
+        f.write(struct.pack('i', 58))
+        f.write(bytearray(56 * 'a' + 'e' + chr(ord('a')+i), 'utf-8'))
+        f.write(struct.pack('i', 58))
+        f.write(bytearray(58 * 'a', 'utf-8'))
+
+    f.flush()
+    assert(os.path.getsize(filename) == 512*8)
+
+    f.write(struct.pack('i', 8))
+    f.write(struct.pack('i', 7))
+    f.write(struct.pack('i', -1))
+    f.write(struct.pack('i', -1))
+
+    for i in range(4):
+        f.write(struct.pack('i', 58))
+        f.write(bytearray(56 * 'a' + 'd' + chr(ord('a')+i), 'utf-8'))
+        f.write(struct.pack('i', 58))
+        f.write(bytearray(58 * 'a', 'utf-8'))
+
+    f.flush()
+    assert(os.path.getsize(filename) == 512*9)
 
 
 main()
