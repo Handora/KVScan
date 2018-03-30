@@ -1,13 +1,13 @@
 * KVScan - A simple iterator style remote scanning C/S model
 ** About
 Wait for completion
-** Todo [4/7]
+** Todo [5/7]
 - [ ] Page class, for bulk read from memory to reduce IO
 - [X] DiskManaer class, for disk management
 - [X] LRUreplacer class, for lru algorithm utility
 - [X] BufferPool class, for memory page buffer managements
 - [X] Server class, for save the mappings and support the concurrent read
-- [ ] Client class, for scan the mappings through bulk rpc
+- [X] Client class, for scan the mappings through bulk rpc
 - [ ] Documents
 ** Build
 #+BEGIN_SRC shell
