@@ -12,6 +12,7 @@ Wait for completion
 - [ ] Client cache, reuse the bufferpoolmanager
 - [ ] first100page, reduce overload of initial read
 - [ ] meta tree, save meta which can be fetched easily
+- [ ] rpc timeout handler
 ** Install
 #+BEGIN_SRC shell
   git clone https://github.com/Handora/KVScan.git kvscan
